@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Log</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      .errorMessage {
+        color: red;
+        font-size: 16pt;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container text-center">
+      <div class="row">
+        <h1>ExpensifyMe</h1>
+        <h5>budget tracking made simple</h5>
+        <ul id="errorList"></ul>
+      </div>
+      <div class="row">
+        <!-- left column for form for new logs or to edit logs -->
+        <div class="col">
+          <div class="card w-100 p-0.5 my-3">
+            <div class="mb-3" id="logInputForm">
+              <div class="card-body">
+                <input type="hidden" name="logId" />
+                <label class="form-label">Expense Log Title:</label>
+                <input type="text" class="form-control" name="logTitle" />
+              </div>
+              <div class="card-body">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">#</th>
+                      <th scope="col">Item</th>
+                      <th scope="col">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">
+                        <input
+                          class="form-check-input itemCheckBox"
+                          type="checkbox"
+                          value=""
+                          name="checkBox"
+                          id="flexCheckDefault"
+                        />
+                      </th>
+                      <th scope="row">1</th>
+                      <td>
+                        <input type="text" class="form-control" name="item" />
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-text">$</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="price"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <input
+                          class="form-check-input itemCheckBox"
+                          type="checkbox"
+                          value=""
+                          name="checkBox"
+                          id="flexCheckDefault"
+                        />
+                      </th>
+                      <th scope="row">2</th>
+                      <td>
+                        <input type="text" class="form-control" name="item" />
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-text">$</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="price"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <input
+                          class="form-check-input itemCheckBox"
+                          type="checkbox"
+                          value=""
+                          name="checkBox"
+                          id="flexCheckDefault"
+                        />
+                      </th>
+                      <th scope="row">3</th>
+                      <td>
+                        <input type="text" class="form-control" name="item" />
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-text">$</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="price"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <input
+                          class="form-check-input itemCheckBox"
+                          type="checkbox"
+                          value=""
+                          name="checkBox"
+                          id="flexCheckDefault"
+                        />
+                      </th>
+                      <th scope="row">4</th>
+                      <td>
+                        <input type="text" class="form-control" name="item" />
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-text">$</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="price"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">
+                        <input
+                          class="form-check-input itemCheckBox"
+                          type="checkbox"
+                          value=""
+                          name="checkBox"
+                          id="flexCheckDefault"
+                        />
+                      </th>
+                      <th scope="row">5</th>
+                      <td>
+                        <input type="text" class="form-control" name="item" />
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-text">$</span>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="price"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <th></th>
+                    <th>Subtotal</th>
+                    <td></td>
+                    <td>
+                      <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="subtotal"
+                        />
+                      </div>
+                    </td>
+                  </tfoot>
+                </table>
+                <div class="card-body">
+                  <button
+                    type="button"
+                    class="btn btn-dark"
+                    id="submitFormButton"
+                  >
+                    Submit & Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- right column for existing logs -->
+
+        <div class="col" id="logList">
+          <!-- block of existing logs -->
+
+          <div class="card w-100 p-1 my-3">
+            <div class="mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Helper Costs</h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Item</th>
+                      <th scope="col">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Insurance</td>
+                      <td>$72.90</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Air Ticket</td>
+                      <td>$200</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>Doctor's Visit</td>
+                      <td>$35.00</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <th>Subtotal</th>
+                    <td></td>
+                    <td>$100.00</td>
+                  </tfoot>
+                </table>
+                <div class="card-body">
+                  <button type="button" class="btn btn-danger">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card w-100 p-1 my-3">
+            <div class="mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Helper Costs</h5>
+              </div>
+              <div class="card-body">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Item</th>
+                      <th scope="col">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Insurance</td>
+                      <td>$72.90</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Air Ticket</td>
+                      <td>$200</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>Doctor's Visit</td>
+                      <td>$35.00</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <th>Subtotal</th>
+                    <td></td>
+                    <td>$100.00</td>
+                  </tfoot>
+                </table>
+                <div class="card-body">
+                  <button type="button" class="btn btn-danger">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      window.addEventListener("load", function () {
+        let logs = [];
+        let globalId = 0;
+
+        // function GET_SPECIFIC_BIN_URL() {};
+
+        function updateGlobalId() {
+          for (let i = 0; i < logs.length; i++) {
+            let currentId = logs[i].id;
+            if (currentId >= globalId) {
+              globalId = currentId + 1;
+              console.log(currentId);
+              console.log(globalId);
+              // to ensure that globalId is always the biggest
+              // no log id will be equal to or bigger than the globalId
+              // new logs will have a unique Id
+            }
+          }
+        }
+
+        // async function importFromJSONBIN() {};
+
+        // async function exportToJSONBIN() {};
+
+        // importFromJSONBIN();
+
+        // function convertLogsFromLocalStorage();
+
+        // function prepareLogsArray() {};
+
+        // function saveLogs() {};
+
+        function resetLog() {
+          // clear the log id hidden form field
+          let logIdInput = document.querySelector("input[name='logId']");
+          logIdInput.value = "";
+
+          // clear the log title form field
+          let logTitleInput = document.querySelector("input[name='logTitle']");
+          logTitleInput.value = "";
+
+          // uncheck the item checkboxes
+          let selectedItemCheckBoxes = document.querySelectorAll(
+            "input[name='checkBox']:checked"
+          );
+          for (let i = 0; i < selectedItemCheckBoxes.length; i++) {
+            let currentSelectedItemCheckBoxes = selectedItemCheckBoxes[i];
+            currentSelectedItemCheckBoxes.checked = false;
+          }
+
+          // clear the item name fields
+
+          let filledItemNames = document.querySelectorAll("input[name='item']");
+          for (let i = 0; i < filledItemNames.length; i++) {
+            let currentFilledItemNames = filledItemNames[i];
+            currentFilledItemNames.value = "";
+          }
+
+          // clear the price fields
+
+          let filledPriceValues = document.querySelectorAll(
+            "input[name='price']"
+          );
+          for (let i = 0; i < filledPriceValues.length; i++) {
+            let currentFilledPriceValues = filledPriceValues[i];
+            currentFilledPriceValues.value = "";
+          }
+        }
+
+        function createNewLogCard(id, logTitle, items) {
+          let newLogItemsList = "";
+          let subtotal = 0;
+
+          for (let j = 0; j < items.length; j++) {
+            let currentItem = items[j];
+            let itemName = currentItem.selectedItem;
+            let itemPrice = currentItem.selectedPrice
+              ? parseFloat(currentItem.selectedPrice).toFixed(2)
+              : "0.00";
+
+            subtotal += parseFloat(itemPrice);
+
+            newLogItemsList += `
+                    <tr>
+                        <th scope="row">${j + 1}</th>
+                        <td>${itemName}</td>
+                        <td>$${itemPrice}</td>
+                    </tr>`;
+          }
+
+          return `<div class="card w-100 p-1 my-3">
+                <div class="mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">${logTitle}</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${newLogItemsList}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Subtotal</th>
+                                    <td></td>
+                                    <td>$${subtotal.toFixed(2)}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="card-body">
+                          <button type="button" class="btn btn-success editLogButton" id="editLogButton-${id}">
+                              Edit
+                          </button>
+                            <button type="button" class="btn btn-danger deleteLogButton" id="deleteLogButton-${id}">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function displayLogs() {
+          document.getElementById("logList").innerHTML = "";
+
+          for (let i = 0; i < logs.length; i++) {
+            let currentLogInfo = logs[i];
+
+            // (1) create the new log card
+            let newLogCard = createNewLogCard(
+              currentLogInfo.id,
+              currentLogInfo.logTitle,
+              currentLogInfo.items
+            );
+            // (2) append to the old logList innerHTML
+            let logList = document.getElementById("logList");
+            let newLogList = logList.innerHTML + newLogCard;
+
+            // (3) update the logList innerHTML
+            logList.innerHTML = newLogList;
+          }
+
+          let deleteLogButtons =
+            document.getElementsByClassName("deleteLogButton");
+          for (let i = 0; i < deleteLogButtons.length; i++) {
+            deleteLogButtons[i].addEventListener("click", function () {
+              let selectedId = this.id.split("-")[1];
+              deleteLog(selectedId);
+              // Split: deleteLogButton-0
+              // split('-') -> ['deleteLogButton','0']
+            });
+          }
+
+          let editLogButtons = document.getElementsByClassName("editLogButton");
+          for (let i = 0; i < editLogButtons.length; i++) {
+            editLogButtons[i].addEventListener("click", function () {
+              let selectedId = this.id.split("-")[1];
+              editLogForm(selectedId);
+            });
+          }
+        }
+
+        function createLog(logTitle, selectedItems) {
+          let newLog = {
+            id: globalId,
+            logTitle,
+            items: selectedItems,
+          };
+          globalId += 1;
+          logs.push(newLog);
+          console.log(logs);
+
+          // exportToJSONBIN();
+          displayLogs();
+        }
+
+        function editLogForm(inputId) {
+          let idx = logs.findIndex((log) => log.id == inputId); // index of the log with the id == inputId
+          if (idx == -1) {
+            // log does not exist
+            return undefined;
+          } else {
+            // log exists
+            let selectedLog = logs[idx];
+
+            // example of a log object
+            // { id: 1, destinationName: "hawaii", price: 'Affordable', duration: '1 Day', activities: [] }
+
+            // set the id in the form
+            document.querySelector("input[name='logId']").value =
+              selectedLog.id;
+
+            // set the log title in the form
+            document.querySelector("input[name='logTitle']").value =
+              selectedLog.logTitle;
+
+            // set the checkboxes in the form
+            let itemCheckBoxes = document.querySelectorAll(
+              "input[name='checkBox']"
+            );
+            console.log(itemCheckBoxes);
+
+            // populate the item names in the form
+
+            // populate the item prices in the form
+          }
+        }
+
+        // function updateLog() {};
+
+        function deleteLog(inputId) {
+          let idx = logs.findIndex((log) => log.id == inputId);
+          if (idx == -1) {
+            return null;
+          } else {
+            logs.splice(idx, 1);
+            // [{log1}, {log2}, {log3}]
+            // logs.splice(1,1)
+            // [{log1}, {log3}]
+
+            // [{log1}, {log2}, {log3}]
+            // logs.splice(1,2)
+            // [{log1}]
+
+            //exportToJSONBIN();
+          }
+
+          displayLogs();
+        }
+
+        displayLogs();
+
+        let button = document.getElementById("submitFormButton");
+        button.addEventListener("click", function () {
+          let selectedItems = [];
+          // flags
+          // (1) title of expense log:  cannot be blank
+
+          let logTitleIsBlank = false;
+
+          // (2) if a checkbox is selected, the corresponding item must be filled
+          // price is optional
+
+          let selectedItemNameIsBlank = false;
+
+          // (3) price, if filled for a selected checkbox item, must be a number
+
+          let priceIsNotANumber = false;
+
+          // clear the error list
+
+          let errorList = document.getElementById("errorList");
+          errorList.innerHTML = "";
+
+          let logIdInput = document.querySelector("input[name='logId']");
+          let logId = logIdInput.value;
+
+          // (1)
+
+          let logTitleInput = document.querySelector("input[name='logTitle']");
+
+          let logTitle = logTitleInput.value;
+          if (logTitle == "") {
+            logTitleIsBlank = true;
+          }
+
+          // (2)
+
+          // check for checkboxes which are selected but have empty item names
+
+          document
+            .querySelectorAll(".itemCheckBox:checked")
+            .forEach((checkbox) => {
+              let row = checkbox.closest("tr"); // get the closest table row for each selected checkbox
+              let itemInput = row.querySelector('input[name^="item"]');
+              let priceInput = row.querySelector('input[name^="price"]');
+              let selectedItemName = itemInput.value.trim(); // trim to remove leading/trailing spaces
+              let selectedPriceInput = priceInput.value.trim();
+
+              if (selectedItemName == "") {
+                selectedItemNameIsBlank = true;
+              }
+
+              if (selectedPriceInput !== "" && isNaN(selectedPriceInput)) {
+                priceIsNotANumber = true;
+              }
+
+              // add only valid items to the list
+
+              if (
+                selectedItemName !== "" &&
+                (selectedPriceInput == "" || !isNaN(selectedPriceInput))
+              ) {
+                selectedItems.push({
+                  selectedItem: selectedItemName,
+                  selectedPrice: selectedPriceInput,
+                });
+              }
+            });
+
+          if (logTitleIsBlank == true) {
+            // show the log title is blank error message
+            errorList.innerHTML +=
+              '<li class="errorMessage">Expense Log Title cannot be blank!</li>';
+          }
+
+          if (selectedItemNameIsBlank == true) {
+            // show the item name is blank error message
+            errorList.innerHTML +=
+              '<li class="errorMessage">Ensure that your selected item name is filled!</li>';
+          }
+
+          if (priceIsNotANumber == true) {
+            // show the item name is blank error message
+            errorList.innerHTML +=
+              '<li class="errorMessage">Please enter a number for the price!</li>';
+          }
+
+          if (
+            logTitleIsBlank == false &&
+            selectedItemNameIsBlank == false &&
+            priceIsNotANumber == false
+          ) {
+            createLog(logTitle, selectedItems);
+            resetLog();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
