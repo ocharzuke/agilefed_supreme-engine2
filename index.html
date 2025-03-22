@@ -251,50 +251,6 @@
               </div>
             </div>
           </div>
-
-          <div class="card w-100 p-1 my-3">
-            <div class="mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Helper Costs</h5>
-              </div>
-              <div class="card-body">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Item</th>
-                      <th scope="col">Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Insurance</td>
-                      <td>$72.90</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Air Ticket</td>
-                      <td>$200</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Doctor's Visit</td>
-                      <td>$35.00</td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <th>Subtotal</th>
-                    <td></td>
-                    <td>$100.00</td>
-                  </tfoot>
-                </table>
-                <div class="card-body">
-                  <button type="button" class="btn btn-danger">Delete</button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -480,7 +436,6 @@
           };
           globalId += 1;
           logs.push(newLog);
-          console.log(logs);
 
           // exportToJSONBIN();
           displayLogs();
@@ -496,7 +451,18 @@
             let selectedLog = logs[idx];
 
             // example of a log object
-            // { id: 1, destinationName: "hawaii", price: 'Affordable', duration: '1 Day', activities: [] }
+            /*
+            {
+              "id": 0,
+              "logTitle": "a",
+              "items": [
+                {
+                  "selectedItem": "afafa",
+                  "selectedPrice": "23"
+                }
+              ]
+            }
+            */
 
             // set the id in the form
             document.querySelector("input[name='logId']").value =
@@ -506,19 +472,62 @@
             document.querySelector("input[name='logTitle']").value =
               selectedLog.logTitle;
 
+            // number of checkboxes to select
+            const items = selectedLog.items;
+            const numItems = items.length;
+
             // set the checkboxes in the form
+            // populate the item and price fields in the form
             let itemCheckBoxes = document.querySelectorAll(
               "input[name='checkBox']"
             );
-            console.log(itemCheckBoxes);
 
-            // populate the item names in the form
+            let itemTextboxes = document.querySelectorAll("input[name='item']");
+            let priceTextboxes = document.querySelectorAll(
+              "input[name='price']"
+            );
 
-            // populate the item prices in the form
+            for (let i = 0; i < numItems; i++) {
+              // checks the checkboxes
+              const checkBox = itemCheckBoxes[i];
+              const itemTextbox = itemTextboxes[i];
+              const priceTextbox = priceTextboxes[i];
+
+              const item = items[i];
+
+              if (!checkBox.checked) {
+                itemCheckBoxes[i].click();
+              }
+
+              itemTextbox.value = item.selectedItem;
+              priceTextbox.value = item.selectedPrice;
+            }
           }
         }
 
-        // function updateLog() {};
+        function updateLog(inputId, inputLogTitle, inputItems) {
+          let idx = logs.findIndex((log) => log.id == inputId);
+
+          if (idx == -1) {
+            // lrip is not found
+            return null;
+          } else {
+            // log is found at index (idx)
+            logs[idx].logTitle = inputLogTitle;
+            logs[idx].items = [];
+
+            for (let i = 0; i < inputItems.length; i++) {
+              let item = {
+                selectedItem: inputItems[i].selectedItem,
+                selectedPrice: inputItems[i].selectedPrice,
+              };
+              logs[idx].items.push(item);
+            }
+
+            // saveLogs();
+          }
+          displayLogs();
+        }
 
         function deleteLog(inputId) {
           let idx = logs.findIndex((log) => log.id == inputId);
@@ -633,8 +642,14 @@
             selectedItemNameIsBlank == false &&
             priceIsNotANumber == false
           ) {
-            createLog(logTitle, selectedItems);
-            resetLog();
+            if (logId !== "") {
+              // update log
+              updateLog(logId, logTitle, selectedItems);
+              resetLog();
+            } else {
+              createLog(logTitle, selectedItems);
+              resetLog();
+            }
           }
         });
       });
