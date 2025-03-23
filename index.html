@@ -10,13 +10,7 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    <style>
-      .errorMessage {
-        color: red;
-        font-size: 16pt;
-        font-weight: 600;
-      }
-    </style>
+    <style></style>
   </head>
 
   <body>
@@ -300,10 +294,10 @@
         async function importFromJSONBIN() {
           let dataFromJSONBIN = await fetch(GET_SPECIFIC_BIN_URL(BIN_ID));
           dataFromJSONBIN = await dataFromJSONBIN.json();
-          tripsFromJSONBIN = dataFromJSONBIN.record.trips;
-          trips = tripsFromJSONBIN;
+          logsFromJSONBIN = dataFromJSONBIN.record.logs;
+          logs = logsFromJSONBIN;
           updateGlobalId();
-          displayTrips();
+          displayLogs();
         }
 
         async function exportToJSONBIN() {
@@ -664,19 +658,19 @@
           if (logTitleIsBlank == true) {
             // show the log title is blank error message
             errorList.innerHTML +=
-              '<li class="errorMessage">Expense Log Title cannot be blank!</li>';
+              '<li class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role = "alert">Expense Log Title cannot be blank!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></li>';
           }
 
           if (selectedItemNameIsBlank == true) {
             // show the item name is blank error message
             errorList.innerHTML +=
-              '<li class="errorMessage">Ensure that your selected item name is filled!</li>';
+              '<li class="alert alert-danger d-flex align-items-center alert-dismissible fade show">Ensure that your selected item name is filled!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></li>';
           }
 
           if (priceIsNotANumber == true) {
             // show the item name is blank error message
             errorList.innerHTML +=
-              '<li class="errorMessage">Please enter a number for the price!</li>';
+              '<li class="alert alert-danger d-flex align-items-center alert-dismissible fade show">Please enter a number for the price!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></li>';
           }
 
           if (
